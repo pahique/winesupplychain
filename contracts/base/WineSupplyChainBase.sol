@@ -49,6 +49,10 @@ contract WineSupplyChainBase is AccessControl {
         address payable distributorID;  // Metamask-Ethereum address of the Distributor
         address payable retailerID; // Metamask-Ethereum address of the Retailer
         address payable consumerID; // Metamask-Ethereum address of the Consumer
+        // year
+        // alcohol by volume 
+        // wine type: white, red, rosé, sparkling, dry, smooth
+        // local da plantação
     }
 
     struct Certification {
@@ -57,19 +61,19 @@ contract WineSupplyChainBase is AccessControl {
     }
 
     // Define events with the same state values and accept 'upc' as input argument
-    event GrapesHarvested(uint upc, string grapeType, uint harvestDate);
-    event GrapesProcessed(uint upc);
-    event WineProduced(uint upc, uint wineLotID, uint fermentationTankID);
-    event WineAged(uint upc, uint barrelID, uint numDaysAging);
-    event WineBottled(uint upc, uint bottlingDate, uint numBottlesLot);
-    event WineRested(uint upc, uint numDaysResting);
-    event WineLabeled(uint upc, string wineLabel, string certification);
-    event WinePacked(uint upc);
-    event WineForSale(uint upc, uint price);
-    event WineSold(uint upc);
-    event WineShipped(uint upc);
-    event WineReceived(uint upc);
-    event WinePurchased(uint upc);
+    event GrapesHarvested(uint indexed upc, string grapeType, uint harvestDate);
+    event GrapesProcessed(uint indexed upc);
+    event WineProduced(uint indexed  upc, uint wineLotID, uint fermentationTankID);
+    event WineAged(uint indexed upc, uint barrelID, uint numDaysAging);
+    event WineBottled(uint indexed upc, uint bottlingDate, uint numBottlesLot);
+    event WineRested(uint indexed upc, uint numDaysResting);
+    event WineLabeled(uint indexed upc, string wineLabel, string certification);
+    event WinePacked(uint indexed upc);
+    event WineForSale(uint indexed upc, uint price);
+    event WineSold(uint indexed upc);
+    event WineShipped(uint indexed upc);
+    event WineReceived(uint indexed upc);
+    event WinePurchased(uint indexed upc);
 
 
 }

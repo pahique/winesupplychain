@@ -25,6 +25,7 @@
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 //const dateTimeAddress = '0x274e3a109ffc2bc43bd44798282bbf31d7f8d611';  // ???
 const HDWalletProvider = require('truffle-hdwallet-provider');
+//const mnemonic = "aspect romance reflect type march marble damp keen garlic rose lend boss";
 const mnemonic = "heavy view squeeze pledge multiply alert mushroom barely crawl joy afraid old";
 
 module.exports = {
@@ -45,7 +46,7 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    development: {
+    ganache: {
       host: "127.0.0.1",     // Localhost (default: none)
       port: 7545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
@@ -57,8 +58,8 @@ module.exports = {
         return new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/68ba229d628440e78337e94eab03c1ad");
       },
       network_id: 4,
-      gas: 4500000,
-      gasPrice: 10000000000,
+      gas: 6712390,
+      //gasPrice: 10000000000,
     }
 
     // Another network with more advanced options...

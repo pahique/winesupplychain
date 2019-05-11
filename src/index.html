@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fair Trade Wine</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">Fair Trade Wine&nbsp;<img width="50" height="50" src="img/grapes.png"></h1>
+        <hr>
+        <p style="text-align: center;">Prove the authenticity of wine using the Ethereum blockchain.</p>
+    </div>
+
+    <div id="ftw-harvest">
+        <h2>Product ID</h2>
+        <div class="form-group">
+            UPC
+            <br>
+            <input type="number" id="upc" name="upc" value=""><br>
+            SKU
+            <br>
+            <input class="input-field" type="number" id="sku" name="sku" value="" readonly><br>
+            Current Owner ID
+            <br>
+            <input type="text" id="ownerID" name="ownerID" value="" size="50" readonly><br>
+            <div class=button-div>
+                <button class="btn-fetchOne" id="button" type="button" data-id="14">Fetch Data 1</button>
+                <button class="btn-fetchTwo" id="button" type="button" data-id="15">Fetch Data 2</button>
+                <button class="btn-fetchThree" id="button" type="button" data-id="16">Fetch Data 3</button>
+                <button class="btn-events" id="button" type="button" data-id="23">Fetch Events</button>
+            </div>
+        </div>
+        <div class=form-break></div>
+        <h2>Producer Actions</h2>
+        <div class="form-group">
+            Producer ID
+            <br>
+            <input type="text" id="originProducerID" name="originProducerID" value="" size="50"><br>
+            Producer Name
+            <br>
+            <input type="text" id="originProducerName" name="originProducerName" value=""><br>
+            Producer Information
+            <br>
+            <input type="text" id="originProducerInformation" name="originProducerInformation" value=""><br>
+            Farm Latitude
+            <br>
+            <input type="text" id="originFarmLatitude" name="originFarmLatitude" value=""><br>
+            Farm Longitude
+            <br>
+            <input type="text" id="originFarmLongitude" name="originFarmLongitude" value=""><br>
+            Product Notes
+            <br>
+            <input type="text" id="productNotes" name="productNotes" value="" size="60"><br>
+            Grape Type
+            <br>
+            <input type="text" id="grapeType" name="grapeType" value="" size="60"><br>
+            Harvest Date
+            <br>
+            <input type="text" id="harvestDate" name="harvestDate" value=""><br>
+            <br>
+            <button class="btn-harvest" id="button" type="button" data-id="1">Harvest Grapes</button>
+            <button class="btn-process" id="button" type="button" data-id="2">Process Grapes</button>
+        </div>
+        <div class=form-break></div>
+        <div class="form-group">
+            Wine Lot ID
+            <br>
+            <input type="number" id="wineLotID" name="wineLotID" value=""><br>
+            Fermentation Tank ID
+            <br>
+            <input type="number" id="fermentationTankID" name="fermentationTankID" value=""><br>
+            <br>
+            <button class="btn-produce" id="button" type="button" data-id="3">Produce Wine</button>
+        </div>
+        <div class=form-break></div>
+        <div class="form-group">
+            Barrel ID
+            <br>
+            <input type="number" id="barrelID" name="barrelID" value=""><br>
+            Number of Days Aging
+            <br>
+            <input type="number" id="numDaysAging" name="numDaysAging" value=""><br>
+            <br>
+            <button class="btn-age" id="button" type="button" data-id="4">Age Wine</button>
+        </div>
+        <div class=form-break></div>
+        <div class="form-group">
+            Bottling Date
+            <br>
+            <input type="text" id="bottlingDate" name="bottlingDate" value=""><br>
+            Number of Bottles in Lot
+            <br>
+            <input type="number" id="numBottlesLot" name="numBottlesLot" value=""><br>
+            <br>
+            <button class="btn-bottle" id="button" type="button" data-id="5">Bottle Up Wine</button>
+        </div>
+        <div class=form-break></div>
+        <div class="form-group">
+            Number of Days Resting
+            <br>
+            <input type="number" id="numDaysResting" name="numDaysResting" value=""><br>
+            <br>
+            <button class="btn-rest" id="button" type="button" data-id="6">Rest Wine</button>
+        </div>
+        <div class=form-break></div>
+        <div class="form-group">
+            Wine Label
+            <br>
+            <input type="text" id="wineLabel" name="wineLabel" value="" size="60"><br>
+            Certification Label<br><span style="font-size: 0.2rem;">* The certification for this label must be given by a Certifier. See "Certifier Actions".</span>
+            <br> 
+            <input type="text" id="certification" name="certification" value="" size="60" readonly><br>
+            Certifier ID
+            <br>
+            <input type="text" id="certifierID" name="certifierID" value="" size="50" readonly><br>
+           <br>
+            <button class="btn-label" id="button" type="button" data-id="7">Label Wine</button>
+            <button class="btn-pack" id="button" type="button" data-id="8">Pack Wine</button>
+        </div>
+        <div class=form-break></div>
+        <div class="form-group">
+            Product Price
+            <br>
+            <input type="number" id="productPrice" name="productPrice" value="">&nbsp;ETH<br>
+            <br>
+            <button class="btn-forsale" id="button" type="button" data-id="9">Wine For Sale</button>
+        </div>
+        <div class=form-break></div>
+        <h2>Certifier Actions</h2>
+        <div class="form-group">
+            Producer to be certified
+            <br>
+            <input type="text" id="producerIDCert" name="producerIDCert" value="" size="20"><br>
+            Wine label to be certified
+            <br>
+            <input type="text" id="wineLabelCert" name="wineLabelCert" value="" size="20"><br>
+            Certification Label
+            <br>
+            <input type="text" id="certificationGranted" name="certificationGranted" value="" size="20"><br>
+            <br>
+            <button class="btn-certify" id="button" type="button" data-id="17">Certify Wine</button>
+        </div>
+        <div class=form-break></div>
+        <h2>Distributor Actions</h2>
+        <div class="form-group">
+            Distributor ID
+            <br>
+            <input type="text" id="distributorID" name="distributorID" value="" size="50" readonly><br>
+            <br>
+            <button class="btn-buy" id="button" type="button" data-id="10">Buy Wine</button>
+            <button class="btn-ship" id="button" type="button" data-id="11">Ship Wine</button>
+        </div>
+        <div class=form-break></div>
+        <h2>Retailer Actions</h2>
+        <div class="form-group">
+            Retailer ID
+            <br>
+            <input type="text" id="retailerID" name="retailerID" value="" size="50" readonly><br>
+            <br>
+            <button class="btn-receive" id="button" type="button" data-id="12">Receive Wine</button>
+        </div>
+        <div class=form-break></div>
+        <h2>Consumer Actions</h2>
+        <div class="form-group">
+            Consumer ID
+            <br>
+            <input type="text" id="consumerID" name="consumerID" value="" size="50" readonly><br>
+            <br>
+            <button class="btn-purchase" id="button" type="button" data-id="13">Purchase Wine</button>
+        </div>
+        <div class=form-break></div>
+        <hr>
+    </div>
+
+    <h2>Transaction History<span id="ftw-history"></span></h2>
+    <div>
+        <ul id="ftw-events">
+            <!-- Events will appear here from app.js -->
+        </ul>
+        <br>
+        <hr>
+    </div>
+
+    <h2>Roles</h2>
+    <div class="form-group">
+        Address
+        <br>
+        <input type="text" id="address" name="address" value="" size="50"><br>
+        <br>
+        <button class="btn-addProducer" id="button" type="button" data-id="18">Add Producer</button>
+        <button class="btn-addCertifier" id="button" type="button" data-id="19">Add Certifier</button>
+        <button class="btn-addDistributor" id="button" type="button" data-id="20">Add Distributor</button>
+        <button class="btn-addRetailer" id="button" type="button" data-id="21">Add Retailer</button>
+        <button class="btn-addConsumer" id="button" type="button" data-id="22">Add Consumer</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

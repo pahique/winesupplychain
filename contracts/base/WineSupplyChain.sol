@@ -407,7 +407,8 @@ contract WineSupplyChain is WineSupplyChainBase {
         string  memory originProducerName,
         string  memory originProducerInformation,
         string  memory originFarmLatitude,
-        string  memory originFarmLongitude
+        string  memory originFarmLongitude,
+        string  memory grapeType
     ) 
     {
         Wine storage wine = items[_upc];
@@ -420,7 +421,8 @@ contract WineSupplyChain is WineSupplyChainBase {
             wine.originProducerName,
             wine.originProducerInformation,
             wine.originFarmLatitude,
-            wine.originFarmLongitude
+            wine.originFarmLongitude,
+            wine.grapeType
         );
     }
 
@@ -486,6 +488,11 @@ contract WineSupplyChain is WineSupplyChainBase {
             wine.numDaysResting,
             wine.certification
         );
+    }
+
+    // Includes a transaction hash associated to a UPC
+    function updateItemHistory(uint _upc, string memory _txHash) public onlyOwner {
+        itemsHistory[_upc].push(_txHash);
     }
 
 }

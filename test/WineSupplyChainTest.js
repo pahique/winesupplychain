@@ -53,6 +53,7 @@ contract('WineSupplyChain', function(accounts) {
     console.log("Retailer: accounts[3] ", accounts[3])
     console.log("Consumer: accounts[4] ", accounts[4])
     console.log("Certifier: accounts[5] ", accounts[5])
+    console.log("Extra account: accounts[6] ", accounts[6])
 
     it("Testing add role", async function() { 
         const supplyChain = await SupplyChain.deployed()
@@ -140,6 +141,7 @@ contract('WineSupplyChain', function(accounts) {
         assert.equal(resultBufferOne[5], originProducerInformation, 'Error: Missing or Invalid originFarmInformation')
         assert.equal(resultBufferOne[6], originFarmLatitude, 'Error: Missing or Invalid originFarmLatitude')
         assert.equal(resultBufferOne[7], originFarmLongitude, 'Error: Missing or Invalid originFarmLongitude')
+        assert.equal(resultBufferOne[8], grapeType, 'Error: Invalid grapeType')
         assert.equal(resultBufferTwo[5], 0, 'Error: Invalid item State')
         assert.equal(resultBufferThree[2], harvestDate, 'Error: Invalid harvestDate')
         assert.equal(tx.logs[0].event, 'GrapesHarvested');
@@ -443,6 +445,7 @@ contract('WineSupplyChain', function(accounts) {
         assert.equal(resultBufferOne[5], originProducerInformation, 'Error: Missing or Invalid originFarmInformation')
         assert.equal(resultBufferOne[6], originFarmLatitude, 'Error: Missing or Invalid originFarmLatitude')
         assert.equal(resultBufferOne[7], originFarmLongitude, 'Error: Missing or Invalid originFarmLongitude')
+        assert.equal(resultBufferOne[8], grapeType, 'Error: Invalid grapeType')
     })
 
     it("Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain", async() => {
