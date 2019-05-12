@@ -6,14 +6,15 @@ App = {
     upc: 1,
     metamaskAccountID: "0x0000000000000000000000000000000000000000",
     ownerID: "0x0000000000000000000000000000000000000000",
+    itemState: 0,
     originProducerID: "0x0000000000000000000000000000000000000000",
     originProducerName: null,
     originProducerInformation: null,
     originFarmLatitude: null,
     originFarmLongitude: null,
-    productNotes: null,
     grapeType: null,
     harvestDate: 0,
+    harvestNotes: null,
     wineLotID: 0,
     fermentationTankID: 0,
     barrelID: 0,
@@ -22,13 +23,13 @@ App = {
     numBottlesLot: 0,
     numDaysResting: 0,
     wineLabel: null,
+    wineInformation: null,
     certification: null,
-    productPrice: 0,
+    price: 0,
     distributorID: "0x0000000000000000000000000000000000000000",
     retailerID: "0x0000000000000000000000000000000000000000",
     consumerID: "0x0000000000000000000000000000000000000000",
     certifierID: "0x0000000000000000000000000000000000000000",
-    itemState: 0,
 
     init: async function () {
         App.readForm();
@@ -45,9 +46,9 @@ App = {
         App.originProducerInformation = $("#originProducerInformation").val();
         App.originFarmLatitude = $("#originFarmLatitude").val();
         App.originFarmLongitude = $("#originFarmLongitude").val();
-        App.productNotes = $("#productNotes").val();
         App.grapeType = $("#grapeType").val();
         App.harvestDate = $("#harvestDate").val();
+        App.harvestNotes = $("#harvestNotes").val();
         App.wineLotID = $("#wineLotID").val();
         App.fermentationTankID = $("#fermentationTankID").val();
         App.barrelID = $("#barrelID").val();
@@ -56,14 +57,15 @@ App = {
         App.numBottlesLot = $("#numBottlesLot").val();
         App.numDaysResting = $("#numDaysResting").val();
         App.wineLabel = $("#wineLabel").val();
+        App.wineInformation = $("#wineInformation").val();
         App.certification = $("#certification").val();
-        App.productPrice = $("#productPrice").val();
+        App.price = $("#price").val();
         App.distributorID = $("#distributorID").val();
         App.retailerID = $("#retailerID").val();
         App.consumerID = $("#consumerID").val();
         App.certifierID = $("#certifierID").val();
 
-        console.log("readForm:",
+        console.log(
             App.sku,
             App.upc,
             App.ownerID, 
@@ -74,6 +76,7 @@ App = {
             App.originFarmLongitude, 
             App.grapeType,
             App.harvestDate,
+            App.harvestNotes, 
             App.wineLotID,
             App.fermentatonTankID,
             App.barrelID,
@@ -83,8 +86,7 @@ App = {
             App.numDaysResting,
             App.wineLabel,
             App.certification,
-            App.productNotes, 
-            App.productPrice, 
+            App.price, 
             App.distributorID, 
             App.retailerID, 
             App.consumerID,
@@ -101,9 +103,9 @@ App = {
         $("#originProducerInformation").val(App.originProducerInformation);
         $("#originFarmLatitude").val(App.originFarmLatitude);
         $("#originFarmLongitude").val(App.originFarmLongitude);
-        $("#productNotes").val(App.productNotes);
         $("#grapeType").val(App.grapeType);
         $("#harvestDate").val(App.harvestDate);
+        $("#harvestNotes").val(App.harvestNotes);
         $("#wineLotID").val(App.wineLotID);
         $("#fermentationTankID").val(App.fermentationTankID);
         $("#barrelID").val(App.barrelID);
@@ -112,8 +114,9 @@ App = {
         $("#numBottlesLot").val(App.numBottlesLot);
         $("#numDaysResting").val(App.numDaysResting);
         $("#wineLabel").val(App.wineLabel);
+        $("#wineInformation").val(App.wineInformation);
         $("#certification").val(App.certification);
-        $("#productPrice").val(App.productPrice);
+        $("#price").val(App.price);
         $("#distributorID").val(App.distributorID);
         $("#retailerID").val(App.retailerID);
         $("#consumerID").val(App.consumerID);
@@ -168,20 +171,19 @@ App = {
     initSupplyChain: function () {
         /// Source the truffle compiled smart contracts
         var jsonSupplyChain='../build/contracts/WineSupplyChain.json';
-        console.log("JSON: " + jsonSupplyChain);
         
         /// JSONfy the smart contracts
         $.getJSON(jsonSupplyChain, function(data) {
-            console.log('Found data: ', data);
+            console.log('JSON: ', data);
             var SupplyChainArtifact = data;
             App.contracts.SupplyChain = TruffleContract(SupplyChainArtifact);
             App.contracts.SupplyChain.setProvider(App.web3Provider);
 
-            // App.fetchItemBufferOne();
-            // App.fetchItemBufferTwo();
-            // App.fetchItemBufferThree();
-            // App.fetchEvents();
-
+            App.populateForm();
+            App.fetchItemBufferOne();
+            App.fetchItemBufferTwo();
+            App.fetchItemBufferThree();
+            App.fetchEvents();
         });
 
         return App.bindEvents();
@@ -250,7 +252,7 @@ App = {
                 return await App.fetchItemBufferThree(event);
                 break;
             case 17:
-                return await App.certifyWine(event);
+                return await App.certifyProducer(event);
                 break;
             case 18:
                 return await App.addProducer(event);
@@ -280,14 +282,14 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.harvestGrapes(
                 App.upc, 
-                App.grapeType,
-                App.metamaskAccountID, 
                 App.originProducerName, 
                 App.originProducerInformation, 
                 App.originFarmLatitude, 
                 App.originFarmLongitude, 
-                App.productNotes,
-                App.harvestDate
+                App.grapeType,
+                App.harvestDate,
+                App.harvestNotes,
+                {from: App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftw-item").text(result);
@@ -321,11 +323,13 @@ App = {
             return instance.produceWine(
                 App.upc, 
                 App.wineLotID,
-                App.fermentationTankID
+                App.fermentationTankID,
+                {from: App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('produceWine',result);
+            App.fetchItemBufferTwo();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -339,11 +343,13 @@ App = {
             return instance.ageWine(
                 App.upc, 
                 App.barrelID,
-                App.numDaysAging
+                App.numDaysAging,
+                {from: App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('ageWine',result);
+            App.fetchItemBufferTwo();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -357,11 +363,13 @@ App = {
             return instance.bottleUpWine(
                 App.upc, 
                 App.bottlingDate,
-                App.numBottlesLot
+                App.numBottlesLot,
+                {from: App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('bottleUpWine',result);
+            App.fetchItemBufferTwo();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -374,11 +382,13 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.restWine(
                 App.upc, 
-                App.numDaysResting
+                App.numDaysResting,
+                {from: App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('restWine',result);
+            App.fetchItemBufferTwo();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -391,17 +401,20 @@ App = {
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.labelWine(
                 App.upc, 
-                App.wineLabel
+                App.wineLabel,
+                App.wineInformation,
+                {from: App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('labelWine',result);
+            App.fetchItemBufferThree();
         }).catch(function(err) {
             console.log(err.message);
         });
     },
 
-    certifyWine: function(event) {
+    certifyProducer: function(event) {
         //event.preventDefault();
         //var processId = parseInt($(event.target).data('id'));
         console.log("account", App.metamaskAccountID);
@@ -409,15 +422,15 @@ App = {
         let wineLabel = $("#wineLabelCert").val();
         let certification = $("#certificationGranted").val();
         App.contracts.SupplyChain.deployed().then(function(instance) {
-            return instance.certifyWine(
+            return instance.certifyProducer(
                 producerID, 
                 wineLabel,
-                certification, {from: App.metamaskAccountID}
+                certification, 
+                {from: App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftw-item").text(result);
-            console.log('certifyWine',result);
-            App.fetchItemBufferTwo();
+            console.log('certifyProducer',result);
             App.fetchItemBufferThree();
         }).catch(function(err) {
             console.log(err.message);
@@ -433,6 +446,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('packWine',result);
+            App.fetchItemBufferThree();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -443,12 +457,13 @@ App = {
         var processId = parseInt($(event.target).data('id'));
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
-            const productPrice = web3.toWei(App.productPrice, "ether");
-            console.log('productPrice', productPrice);
-            return instance.sellWine(App.upc, productPrice, {from: App.metamaskAccountID});
+            const price = web3.toWei(App.price, "ether");
+            console.log('price', price);
+            return instance.sellWine(App.upc, price, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('sellWine',result);
+            App.fetchItemBufferThree();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -459,8 +474,8 @@ App = {
         var processId = parseInt($(event.target).data('id'));
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
-            const productPrice = web3.toWei(App.productPrice, "ether");
-            return instance.buyWine(App.upc, {from: App.metamaskAccountID, value: productPrice});
+            const price = web3.toWei(App.price, "ether");
+            return instance.buyWine(App.upc, {from: App.metamaskAccountID, value: price});
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('buyWine',result);
@@ -479,7 +494,6 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('shipWine',result);
-            App.fetchItemBufferTwo();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -494,7 +508,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('receiveWine',result);
-            App.fetchItemBufferTwo();
+            App.fetchItemBufferThree();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -509,7 +523,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('purchaseWine',result);
-            App.fetchItemBufferTwo();
+            App.fetchItemBufferThree();
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -595,12 +609,13 @@ App = {
             App.sku = result[0];
             App.upc = result[1];
             App.ownerID = result[2];
-            App.originProducerID = result[3];
-            App.originProducerName = result[4];
-            App.originProducerInformation = result[5];
-            App.originFarmLatitude = result[6];
-            App.originFarmLongitude = result[7];
-            App.grapeType = result[8];
+            App.itemState = result[3];
+            App.originProducerID = result[4];
+            App.originProducerName = result[5];
+            App.originProducerInformation = result[6];
+            App.originFarmLatitude = result[7];
+            App.originFarmLongitude = result[8];
+            App.grapeType = result[9];
             App.populateForm();
         }).catch(function(err) {
             console.log(err.message);
@@ -618,16 +633,16 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('fetchItemBufferTwo', result);
-            App.sku = result[0];
-            App.upc = result[1];
-            App.wineLabel = result[2];
-            App.productNotes = result[3];
-            App.productPrice = web3.fromWei(result[4], 'ether');
-            App.itemState = result[5];
-            App.certifierID = result[6];
-            App.distributorID = result[7];
-            App.retailerID = result[8];
-            App.consumerID = result[9];
+            App.upc = result[0];
+            App.harvestDate = result[1];
+            App.harvestNotes = result[2];
+            App.wineLotID = result[3];
+            App.fermentationTankID = result[4];
+            App.barrelID = result[5];
+            App.numDaysAging = result[6];
+            App.bottlingDate = result[7];
+            App.numBottlesLot = result[8];
+            App.numDaysResting = result[9];
             App.populateForm();
         }).catch(function(err) {
             console.log(err.message);
@@ -643,17 +658,15 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('fetchItemBufferThree', result);
-            App.sku = result[0];
-            App.upc = result[1];
-            App.harvestDate = result[2];
-            App.wineLotID = result[3];
-            App.fermentationTankID = result[4];
-            App.barrelID = result[5];
-            App.numDaysAging = result[6];
-            App.bottlingDate = result[7];
-            App.numBottlesLot = result[8];
-            App.numDaysResting = result[9];
-            App.certification = result[10];
+            App.upc = result[0];
+            App.wineLabel = result[1];
+            App.wineInformation = result[2];
+            App.certification = result[3];
+            App.certifierID = result[4];
+            App.price = web3.fromWei(result[5], 'ether');
+            App.distributorID = result[6];
+            App.retailerID = result[7];
+            App.consumerID = result[8];
             App.populateForm();
         }).catch(function(err) {
             console.log(err.message);
@@ -661,8 +674,6 @@ App = {
     },
     
     fetchEvents: function () {
-        let txMap = new Map();
-        console.log("cheguei aqui");
         if (typeof App.contracts.SupplyChain.currentProvider.sendAsync !== "function") {
             App.contracts.SupplyChain.currentProvider.sendAsync = function () {
                 return App.contracts.SupplyChain.currentProvider.send.apply(
@@ -672,22 +683,14 @@ App = {
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
             $("#ftw-events").empty();
-            console.log("empty()");
             instance.allEvents({fromBlock: 0}, function(err, log) {
-                console.log("event", log);
                 if (!err && log.args.upc == App.upc) {   
-                    console.log(log.transactionHash, txMap.get(log.transactionHash));
-                    if (!txMap.has(log.transactionHash)) {
-                        txMap.set(log.transactionHash, true);
-                        console.log(log.transactionHash, txMap.get(log.transactionHash));
-                        $("#ftw-events").append('<li>' + log.event + ' (upc: ' + log.args.upc + ') - ' + log.transactionHash + '</li>');
-                    }
+                    $("#ftw-events").append('<li>' + log.event + ' (upc: ' + log.args.upc + ') - ' + log.transactionHash + '</li>');
                 }
             });
         }).catch(function(err) {
             console.log(err.message);
         });
-        
     }
 };
 

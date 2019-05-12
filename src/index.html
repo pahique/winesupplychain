@@ -40,7 +40,7 @@
         <div class="form-group">
             Producer ID
             <br>
-            <input type="text" id="originProducerID" name="originProducerID" value="" size="50"><br>
+            <input type="text" id="originProducerID" name="originProducerID" value="" size="50" readonly><br>
             Producer Name
             <br>
             <input type="text" id="originProducerName" name="originProducerName" value=""><br>
@@ -53,15 +53,15 @@
             Farm Longitude
             <br>
             <input type="text" id="originFarmLongitude" name="originFarmLongitude" value=""><br>
-            Product Notes
-            <br>
-            <input type="text" id="productNotes" name="productNotes" value="" size="60"><br>
             Grape Type
             <br>
             <input type="text" id="grapeType" name="grapeType" value="" size="60"><br>
-            Harvest Date
+            Harvest Date&nbsp;&nbsp;<span class="date-pattern">YYYYMMDD</span>
             <br>
-            <input type="text" id="harvestDate" name="harvestDate" value=""><br>
+            <input type="number" id="harvestDate" name="harvestDate" value=""><br>
+            Harvest Notes
+            <br>
+            <input type="text" id="harvestNotes" name="harvestNotes" value="" size="60"><br>
             <br>
             <button class="btn-harvest" id="button" type="button" data-id="1">Harvest Grapes</button>
             <button class="btn-process" id="button" type="button" data-id="2">Process Grapes</button>
@@ -90,9 +90,9 @@
         </div>
         <div class=form-break></div>
         <div class="form-group">
-            Bottling Date
+            Bottling Date&nbsp;&nbsp;<span class="date-pattern">YYYYMMDD</span>
             <br>
-            <input type="text" id="bottlingDate" name="bottlingDate" value=""><br>
+            <input type="number" id="bottlingDate" name="bottlingDate" value=""><br>
             Number of Bottles in Lot
             <br>
             <input type="number" id="numBottlesLot" name="numBottlesLot" value=""><br>
@@ -112,7 +112,13 @@
             Wine Label
             <br>
             <input type="text" id="wineLabel" name="wineLabel" value="" size="60"><br>
-            Certification Label<br><span style="font-size: 0.2rem;">* The certification for this label must be given by a Certifier. See "Certifier Actions".</span>
+            Wine Year
+            <br>
+            <input type="number" id="wineYear" name="wineYear" value="" size="60"><br>
+            Wine Information
+            <br>
+            <input type="text" id="wineInformation" name="wineInformation" value="" size="60"><br>
+            Certification Label<br><span class="label-notes">* The certification for this label must be given by a Certifier. See "Certifier Actions".</span>
             <br> 
             <input type="text" id="certification" name="certification" value="" size="60" readonly><br>
             Certifier ID
@@ -120,13 +126,20 @@
             <input type="text" id="certifierID" name="certifierID" value="" size="50" readonly><br>
            <br>
             <button class="btn-label" id="button" type="button" data-id="7">Label Wine</button>
+        </div>
+        <div class=form-break></div>
+        <div class="form-group">
+            Pack ID
+            <br>
+            <input type="number" id="packID" name="packID" value="" size="60"><br>
+            <br>
             <button class="btn-pack" id="button" type="button" data-id="8">Pack Wine</button>
         </div>
         <div class=form-break></div>
         <div class="form-group">
             Product Price
             <br>
-            <input type="number" id="productPrice" name="productPrice" value="">&nbsp;ETH<br>
+            <input type="number" id="price" name="price" value="">&nbsp;ETH<br>
             <br>
             <button class="btn-forsale" id="button" type="button" data-id="9">Wine For Sale</button>
         </div>
@@ -143,7 +156,7 @@
             <br>
             <input type="text" id="certificationGranted" name="certificationGranted" value="" size="20"><br>
             <br>
-            <button class="btn-certify" id="button" type="button" data-id="17">Certify Wine</button>
+            <button class="btn-certify" id="button" type="button" data-id="17">Certify Producer</button>
         </div>
         <div class=form-break></div>
         <h2>Distributor Actions</h2>

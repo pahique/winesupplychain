@@ -9,7 +9,6 @@ body {
   margin: 0 auto;
 }
 
-
 .bold { 
   font-weight: bolder;
 }
@@ -63,4 +62,13 @@ button {
 
 .horizontal-rule {
   background-color:#BDBDBD;
+}
+
+.date-pattern {
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.label-notes {
+  font-size: 0.7rem;
 }

@@ -17,10 +17,9 @@ contract WineSupplyChain is WineSupplyChainBase {
     // that track its journey through the supply chain -- to be sent from DApp.
     mapping (uint => string[]) itemsHistory;
   
-    // For each producer, defines a certification per wine label
-    mapping (address => mapping(string => Certification)) internal producerToWineLabelToCertification;
+    // Stores a certification, for each producer, per wine label
+    mapping (address => mapping(string => Certification)) internal certificationsGranted;
 
-    State constant defaultState = State.GrapesHarvested;
 
     // In the constructor set 'owner' to the address that instantiated the contract
     // and set 'sku' to 1
@@ -34,7 +33,7 @@ contract WineSupplyChain is WineSupplyChainBase {
     // Define a modifier that checks the price and refunds the remaining balance
     modifier checkValue(uint _upc) {
         _;
-        uint _price = items[_upc].productPrice;
+        uint _price = items[_upc].price;
         uint amountToReturn = msg.value - _price;
         msg.sender.transfer(amountToReturn);
     }
@@ -133,35 +132,33 @@ contract WineSupplyChain is WineSupplyChainBase {
     function harvestGrapes
     (
         uint _upc, 
-        string memory _grapeType,
-        address payable _originProducerID, 
         string memory _originProducerName, 
         string memory _originProducerInformation, 
         string memory _originFarmLatitude, 
         string memory _originFarmLongitude, 
-        string memory _productNotes,
-        uint _harvestDate
+        string memory _grapeType,
+        uint _harvestDate,
+        string memory _harvestNotes
     ) public 
       onlyProducer
       isNewUpc(_upc) 
-      verifyCaller(_originProducerID) 
     {
         // Add the new item as part of Harvest
         items[_upc] = Wine(
             sku,
             _upc,
             msg.sender,
-            _originProducerID,
+            State.GrapesHarvested,
+            msg.sender,
             _originProducerName,
             _originProducerInformation,
             _originFarmLatitude,
             _originFarmLongitude,
             _grapeType,
             _harvestDate,
-            0, 0, 0, 0, 0, 0, 0, "", "",
-            _productNotes,
+            _harvestNotes,
+            0, 0, 0, 0, 0, 0, 0, "", "", "",
             0,
-            State.GrapesHarvested,
             address(0),
             address(0),
             address(0),
@@ -227,39 +224,6 @@ contract WineSupplyChain is WineSupplyChainBase {
         items[_upc].bottlingDate = _bottlingDate;
         items[_upc].numBottlesLot = _numBottlesLot;
         items[_upc].itemState = State.WineBottled;
-        // for (uint i=0; i<_numBottlesLot; i++) {
-        //     sku += 1;
-        //     upc += 1;
-        //     Wine memory wine = Wine(
-        //         sku,
-        //         upc,
-        //         msg.sender,
-        //         items[_upc].originProducerID,
-        //         items[_upc].originProducerName,
-        //         items[_upc].originProducerInformation,
-        //         items[_upc].originFarmLatitude,
-        //         items[_upc].originFarmLongitude,
-        //         items[_upc].grapeType,
-        //         items[_upc].harvestDate,
-        //         items[_upc].wineLotID,
-        //         items[_upc].fermentationTankID,
-        //         items[_upc].barrelID,
-        //         items[_upc].numDaysAging,
-        //         items[_upc].numDaysResting,
-        //         items[_upc].bottlingDate,
-        //         items[_upc].numBottlesLot,
-        //         items[_upc].wineLabel,
-        //         items[_upc].certification,
-        //         items[_upc].productNotes,
-        //         items[_upc].productPrice,
-        //         items[_upc].itemState,
-        //         items[_upc].certifierID,
-        //         items[_upc].distributorID,
-        //         items[_upc].retailerID,
-        //         items[_upc].consumerID
-        //     );
-        //     items[upc] = wine;
-        // }
         // Emit the appropriate event
         emit WineBottled(_upc, _bottlingDate, _numBottlesLot);
     }
@@ -279,12 +243,12 @@ contract WineSupplyChain is WineSupplyChainBase {
     }
 
     // Define a function 'certifyWine' that allows a certifier to apply a wine certification to a label
-    function certifyWine(address _producer, string memory _wineLabel, string memory _certification) public onlyCertifier {
-        producerToWineLabelToCertification[_producer][_wineLabel] = Certification(msg.sender, _certification);
+    function certifyProducer(address _producer, string memory _wineLabel, string memory _certification) public onlyCertifier {
+        certificationsGranted[_producer][_wineLabel] = Certification(msg.sender, _certification);
     }
 
     // Define a function 'labelWine' that allows a producer to mark an item 'WineLabeled'
-    function labelWine(uint _upc, string memory _wineLabel) public 
+    function labelWine(uint _upc, string memory _wineLabel, string memory _wineInformation) public 
         // Call modifier to check if upc has passed previous supply chain stage
         wineRested(_upc)
         // Call modifier to verify caller of this function
@@ -293,11 +257,12 @@ contract WineSupplyChain is WineSupplyChainBase {
         address producer = items[_upc].originProducerID;
         // Update the appropriate fields
         items[_upc].wineLabel = _wineLabel;
-        items[_upc].certification = producerToWineLabelToCertification[producer][_wineLabel].certification;
-        items[_upc].certifierID = producerToWineLabelToCertification[producer][_wineLabel].certifierID;
+        items[_upc].wineInformation = _wineInformation;
+        items[_upc].certification = certificationsGranted[producer][_wineLabel].certification;
+        items[_upc].certifierID = certificationsGranted[producer][_wineLabel].certifierID;
         items[_upc].itemState = State.WineLabeled;
         // Emit the appropriate event
-        emit WineLabeled(_upc, _wineLabel, producerToWineLabelToCertification[producer][_wineLabel].certification);
+        emit WineLabeled(_upc, _wineLabel, certificationsGranted[producer][_wineLabel].certification);
     }
 
     // Define a function 'packWine' that allows a producer to mark an item 'WinePacked'
@@ -321,7 +286,7 @@ contract WineSupplyChain is WineSupplyChainBase {
         verifyCaller(items[_upc].originProducerID) 
     {
         // Update the appropriate fields
-        items[_upc].productPrice = _price;
+        items[_upc].price = _price;
         items[_upc].itemState = State.WineForSale;
         // Emit the appropriate event
         emit WineForSale(_upc, _price);
@@ -334,7 +299,7 @@ contract WineSupplyChain is WineSupplyChainBase {
         // Call modifier to check if upc has passed previous supply chain stage
         wineForSale(_upc)
         // Call modifer to check if buyer has paid enough
-        paidEnough(items[_upc].productPrice)
+        paidEnough(items[_upc].price)
         // Call modifer to send any excess ether back to buyer
         checkValue(_upc)
         // Call modifier to verify caller of this function
@@ -345,7 +310,7 @@ contract WineSupplyChain is WineSupplyChainBase {
         items[_upc].distributorID = msg.sender;
         items[_upc].itemState = State.WineSold;
         // Transfer money to producer
-        uint price = items[_upc].productPrice;
+        uint price = items[_upc].price;
         items[_upc].originProducerID.transfer(price);
         // emit the appropriate event
         emit WineSold(_upc);
@@ -403,6 +368,7 @@ contract WineSupplyChain is WineSupplyChainBase {
         uint    itemSKU,
         uint    itemUPC,
         address ownerID,
+        uint    itemState,
         address originProducerID,
         string  memory originProducerName,
         string  memory originProducerInformation,
@@ -417,6 +383,7 @@ contract WineSupplyChain is WineSupplyChainBase {
             wine.sku,
             wine.upc,
             wine.ownerID,
+            uint(wine.itemState),
             wine.originProducerID,
             wine.originProducerName,
             wine.originProducerInformation,
@@ -429,13 +396,43 @@ contract WineSupplyChain is WineSupplyChainBase {
     // Define a function 'fetchItemBufferTwo' that fetches the data
     function fetchItemBufferTwo(uint _upc) public view returns 
     (
-        uint    itemSKU,
+        uint    itemUPC,
+        uint    harvestDate,
+        string memory harvestNotes,
+        uint    wineLotID,
+        uint    fermentationTankID,
+        uint    barrelID,
+        uint    numDaysAging,
+        uint    bottlingDate,
+        uint    numBottlesLot,
+        uint    numDaysResting
+    ) 
+    {
+        Wine storage wine = items[_upc];
+        return 
+        (
+            wine.upc,
+            wine.harvestDate,
+            wine.harvestNotes,
+            wine.wineLotID,
+            wine.fermentationTankID,
+            wine.barrelID,
+            wine.numDaysAging,
+            wine.bottlingDate,
+            wine.numBottlesLot,
+            wine.numDaysResting
+        );
+    }
+
+    // Define a function 'fetchItemBufferThree' that fetches the data
+    function fetchItemBufferThree(uint _upc) public view returns 
+    (
         uint    itemUPC,
         string memory wineLabel,
-        string memory productNotes,
-        uint    productPrice,
-        uint    itemState,
+        string memory wineInformation,
+        string memory certification,
         address certifierID,
+        uint    price,
         address distributorID,
         address retailerID,
         address consumerID
@@ -444,49 +441,15 @@ contract WineSupplyChain is WineSupplyChainBase {
         Wine storage wine = items[_upc];
         return 
         (
-            wine.sku,
             wine.upc,
             wine.wineLabel,
-            wine.productNotes,
-            wine.productPrice,
-            uint(wine.itemState),
+            wine.wineInformation,
+            wine.certification,
             wine.certifierID,
+            wine.price,
             wine.distributorID,
             wine.retailerID,
             wine.consumerID
-        );
-    }
-
-    // Define a function 'fetchItemBufferThree' that fetches the data
-    function fetchItemBufferThree(uint _upc) public view returns 
-    (
-        uint    itemSKU,
-        uint    itemUPC,
-        uint    harvestDate,
-        uint    wineLotID,
-        uint    fermentationTankID,
-        uint    barrelID,
-        uint    numDaysAging,
-        uint    bottlingDate,
-        uint    numBottlesLot,
-        uint    numDaysResting,
-        string memory certification
-    ) 
-    {
-        Wine storage wine = items[_upc];
-        return 
-        (
-            wine.sku,
-            wine.upc,
-            wine.harvestDate,
-            wine.wineLotID,
-            wine.fermentationTankID,
-            wine.barrelID,
-            wine.numDaysAging,
-            wine.bottlingDate,
-            wine.numBottlesLot,
-            wine.numDaysResting,
-            wine.certification
         );
     }
 
