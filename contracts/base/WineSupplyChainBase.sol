@@ -46,6 +46,7 @@ contract WineSupplyChainBase is AccessControl {
         string    wineInformation;  // Extra information like alcohol per volume, wine type, year, etc
         string    certification;     // Certification labels (ex: IGT, IGP, DOC, DOP, DEMETER, etc)
         uint      price;  // Price
+        string    imageHash; // Picture of the product
         address payable certifierID;  // Metamask-Ethereum address of the Certifier
         address payable distributorID;  // Metamask-Ethereum address of the Distributor
         address payable retailerID; // Metamask-Ethereum address of the Retailer

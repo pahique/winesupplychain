@@ -27,6 +27,7 @@ contract('WineSupplyChain', function(accounts) {
     let wineInformation = '13.5% alcohol by volume'
     let certification = 'DOCG'
     const price = 5000000
+    let imageHash = 'HASH';
     const certifierID = accounts[2]
     const distributorID = accounts[3]
     const retailerID = accounts[4]
@@ -387,7 +388,7 @@ contract('WineSupplyChain', function(accounts) {
     it("Testing smart contract function sellWine() that allows a producer to sell wine", async() => {
         const supplyChain = await SupplyChain.deployed()
         // Mark an item as WineForSale by calling function sellWine()
-        tx = await supplyChain.sellWine(upc, price, {from: originProducerID})
+        tx = await supplyChain.sellWine(upc, price, imageHash, {from: originProducerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
@@ -399,6 +400,7 @@ contract('WineSupplyChain', function(accounts) {
         assert.equal(resultBufferOne[2], originProducerID, 'Error: Missing or Invalid ownerID')
         assert.equal(resultBufferOne[3], 8, 'Error: Invalid item State')
         assert.equal(resultBufferThree[5], price, 'Error: Invalid price')
+        assert.equal(resultBufferThree[6], imageHash, 'Error: Invalid imageHash')
         assert.equal(tx.logs[0].event, 'WineForSale');
         assert.equal(tx.logs[0].args.upc, upc);
         assert.equal(tx.logs[0].args.price, price);
@@ -453,7 +455,7 @@ contract('WineSupplyChain', function(accounts) {
         assert.equal(resultBufferOne[2], distributorID, 'Error: Missing or Invalid ownerID')
         assert.equal(resultBufferOne[3], 9, 'Error: Invalid item State')
         assert.equal(resultBufferThree[5], price, 'Error: Invalid price')
-        assert.equal(resultBufferThree[6], distributorID, 'Error: Invalid distributorID')
+        assert.equal(resultBufferThree[7], distributorID, 'Error: Invalid distributorID')
         assert.equal(tx.logs[0].event, 'WineSold');
         assert.equal(tx.logs[0].args.upc, upc);
     })    
@@ -472,7 +474,7 @@ contract('WineSupplyChain', function(accounts) {
         assert.equal(resultBufferOne[1], upc, 'Error: Invalid item UPC')
         assert.equal(resultBufferOne[2], distributorID, 'Error: Missing or Invalid ownerID')
         assert.equal(resultBufferOne[3], 10, 'Error: Invalid item State')
-        assert.equal(resultBufferThree[6], distributorID, 'Error: Invalid distributorID')
+        assert.equal(resultBufferThree[7], distributorID, 'Error: Invalid distributorID')
         assert.equal(tx.logs[0].event, 'WineShipped');
         assert.equal(tx.logs[0].args.upc, upc);
     })    
@@ -500,7 +502,7 @@ contract('WineSupplyChain', function(accounts) {
         assert.equal(resultBufferOne[1], upc, 'Error: Invalid item UPC')
         assert.equal(resultBufferOne[2], retailerID, 'Error: Missing or Invalid ownerID')
         assert.equal(resultBufferOne[3], 11, 'Error: Invalid item State')
-        assert.equal(resultBufferThree[7], retailerID, 'Error: Invalid retailerID')
+        assert.equal(resultBufferThree[8], retailerID, 'Error: Invalid retailerID')
         assert.equal(tx.logs[0].event, 'WineReceived');
         assert.equal(tx.logs[0].args.upc, upc);
     })    
@@ -528,7 +530,7 @@ contract('WineSupplyChain', function(accounts) {
         assert.equal(resultBufferOne[1], upc, 'Error: Invalid item UPC')
         assert.equal(resultBufferOne[2], consumerID, 'Error: Missing or Invalid ownerID')
         assert.equal(resultBufferOne[3], 12, 'Error: Invalid item State')
-        assert.equal(resultBufferThree[8], consumerID, 'Error: Invalid consumerID')
+        assert.equal(resultBufferThree[9], consumerID, 'Error: Invalid consumerID')
         assert.equal(tx.logs[0].event, 'WinePurchased');
         assert.equal(tx.logs[0].args.upc, upc);
     })    
@@ -584,9 +586,10 @@ contract('WineSupplyChain', function(accounts) {
         assert.equal(resultBufferThree[3], certification, 'Error: Missing or Invalid certification')
         assert.equal(resultBufferThree[4], certifierID, 'Error: Missing or Invalid certifierID')
         assert.equal(resultBufferThree[5], price, 'Error: Missing or Invalid price')
-        assert.equal(resultBufferThree[6], distributorID, 'Error: Missing or Invalid distributorID')
-        assert.equal(resultBufferThree[7], retailerID, 'Error: Missing or Invalid retailerID')
-        assert.equal(resultBufferThree[8], consumerID, 'Error: Missing or Invalid consumerID')
+        assert.equal(resultBufferThree[6], imageHash, 'Error: Missing or Invalid imageHash')
+        assert.equal(resultBufferThree[7], distributorID, 'Error: Missing or Invalid distributorID')
+        assert.equal(resultBufferThree[8], retailerID, 'Error: Missing or Invalid retailerID')
+        assert.equal(resultBufferThree[9], consumerID, 'Error: Missing or Invalid consumerID')
     })
 
 });

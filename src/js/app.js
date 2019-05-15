@@ -1,5 +1,6 @@
 App = {
     web3Provider: null,
+    ipfs: null,
     contracts: {},
     emptyAddress: "0x0000000000000000000000000000000000000000",
     sku: 1,
@@ -26,6 +27,7 @@ App = {
     wineInformation: null,
     certification: null,
     price: 0,
+    imageHash: null,
     distributorID: "0x0000000000000000000000000000000000000000",
     retailerID: "0x0000000000000000000000000000000000000000",
     consumerID: "0x0000000000000000000000000000000000000000",
@@ -60,38 +62,40 @@ App = {
         App.wineInformation = $("#wineInformation").val();
         App.certification = $("#certification").val();
         App.price = $("#price").val();
+        App.imageHash = $("#imageHash").val();
         App.distributorID = $("#distributorID").val();
         App.retailerID = $("#retailerID").val();
         App.consumerID = $("#consumerID").val();
         App.certifierID = $("#certifierID").val();
 
-        console.log(
-            App.sku,
-            App.upc,
-            App.ownerID, 
-            App.originProducerID, 
-            App.originProducerName, 
-            App.originProducerInformation, 
-            App.originFarmLatitude, 
-            App.originFarmLongitude, 
-            App.grapeType,
-            App.harvestDate,
-            App.harvestNotes, 
-            App.wineLotID,
-            App.fermentatonTankID,
-            App.barrelID,
-            App.numDaysAging,
-            App.bottlingDate,
-            App.numBottlesLot,
-            App.numDaysResting,
-            App.wineLabel,
-            App.certification,
-            App.price, 
-            App.distributorID, 
-            App.retailerID, 
-            App.consumerID,
-            App.certifierID
-        );
+        // console.log(
+        //     App.sku,
+        //     App.upc,
+        //     App.ownerID, 
+        //     App.originProducerID, 
+        //     App.originProducerName, 
+        //     App.originProducerInformation, 
+        //     App.originFarmLatitude, 
+        //     App.originFarmLongitude, 
+        //     App.grapeType,
+        //     App.harvestDate,
+        //     App.harvestNotes, 
+        //     App.wineLotID,
+        //     App.fermentatonTankID,
+        //     App.barrelID,
+        //     App.numDaysAging,
+        //     App.bottlingDate,
+        //     App.numBottlesLot,
+        //     App.numDaysResting,
+        //     App.wineLabel,
+        //     App.certification,
+        //     App.price, 
+        //     App.imageHash,
+        //     App.distributorID, 
+        //     App.retailerID, 
+        //     App.consumerID,
+        //     App.certifierID
+        // );
     },
 
     populateForm: function() {
@@ -117,10 +121,12 @@ App = {
         $("#wineInformation").val(App.wineInformation);
         $("#certification").val(App.certification);
         $("#price").val(App.price);
+        $("#imageHash").val(App.imageHash);
         $("#distributorID").val(App.distributorID);
         $("#retailerID").val(App.retailerID);
         $("#consumerID").val(App.consumerID);
         $("#certifierID").val(App.certifierID);
+        App.updateProductImage(App.imageHash);
     },
 
     initWeb3: async function () {
@@ -150,6 +156,8 @@ App = {
 
         App.getMetaskAccountID();
 
+        App.ipfs = window.IpfsApi('ipfs.infura.io', '5001', {protocol: 'https'});
+        
         return App.initSupplyChain();
     },
 
@@ -159,7 +167,7 @@ App = {
         // Retrieving accounts
         web3.eth.getAccounts(function(err, res) {
             if (err) {
-                console.log('Error:',err);
+                console.log('Error:', err);
                 return;
             }
             console.log('getMetaskID:',res);
@@ -170,7 +178,8 @@ App = {
 
     initSupplyChain: function () {
         /// Source the truffle compiled smart contracts
-        var jsonSupplyChain='../build/contracts/WineSupplyChain.json';
+        //var jsonSupplyChain='../build/contracts/WineSupplyChain.json';
+        var jsonSupplyChain="abi/WineSupplyChain.json";
         
         /// JSONfy the smart contracts
         $.getJSON(jsonSupplyChain, function(data) {
@@ -195,7 +204,10 @@ App = {
 
     handleButtonClick: async function(event) {
         App.readForm();
-        event.preventDefault();
+        if (event.target.id !== "fileinput") {
+            // Don't prevent the default behavior when using file inputs
+            event.preventDefault();
+        }
 
         App.getMetaskAccountID();
 
@@ -272,12 +284,62 @@ App = {
             case 23:
                 return await App.fetchEvents(event);
                 break;
+            case 24:
+                return await App.handleFileSelect(event);
+                break;
         }
+    },
+
+    handleFileSelect: function(event) {
+        if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+            alert('The File APIs are not fully supported in this browser.');
+            return;
+          }   
+      
+          input = document.getElementById('fileinput');
+          if (!input) {
+            alert("Couldn't find the fileinput element.");
+          }
+          else if (!input.files) {
+            alert("This browser doesn't seem to support the `files` property of file inputs.");
+          }
+          else if (!input.files[0]) {
+            alert("Please select a file before clicking 'Upload'");               
+          }
+          else {
+            console.log("Reading file contents...");
+            file = input.files[0];
+            fr = new FileReader();
+            fr.onloadend = App.receivedData;
+            fr.readAsBinaryString(file);
+          }
+    },
+
+    receivedData: function() {
+        console.log("Result length: ", fr.result.length);
+        const content = App.ipfs.Buffer.from(btoa(fr.result), "base64");
+        const files = [
+            {
+                path: file,
+                content: content
+            }
+        ];
+        console.log("Sending file to IPFS...");
+        App.ipfs.files.add(files, (err, res) => {
+            if (!err) {
+                const hash = res[0].hash;
+                console.log("IPFS result: ", hash);
+                $("#imageHash").val(hash);
+            } else {
+                console.log(err);
+            }
+        });
     },
 
     harvestGrapes: function(event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
+        App.clearProductImage();
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.harvestGrapes(
@@ -458,8 +520,8 @@ App = {
 
         App.contracts.SupplyChain.deployed().then(function(instance) {
             const price = web3.toWei(App.price, "ether");
-            console.log('price', price);
-            return instance.sellWine(App.upc, price, {from: App.metamaskAccountID});
+            console.log('price: ', price, ', imageHash: ', App.imageHash);
+            return instance.sellWine(App.upc, price, App.imageHash, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('sellWine',result);
@@ -467,6 +529,28 @@ App = {
         }).catch(function(err) {
             console.log(err.message);
         });
+    },
+
+    updateProductImage: function(hash) {
+        if (hash !== '' && hash !== undefined) {
+            $("#productImage").attr('src', 'https://ipfs.infura.io:5001/api/v0/cat?arg=' + encodeURIComponent(hash));
+            console.log("Show image!", $("#productImage").attr('src'));
+            $("#productImage").css('visibility', 'visible');
+            // App.ipfs.files.cat(hash, function (err, file) {
+            //     if (err) {
+            //         throw err
+            //     }
+            //     let img = file.toString("base64");
+            //     $("#productImage").attr('src', "data:image/png;base64," + img);
+            // });
+        } else {
+            $("#productImage").attr('src', '');
+            $("#productImage").css('visibility', 'hidden');
+        }
+    },
+
+    clearProductImage: function() {
+        App.updateProductImage('');
     },
 
     buyWine: function (event) {
@@ -652,7 +736,8 @@ App = {
     fetchItemBufferThree: function () {
         App.upc = $('#upc').val();
         console.log('upc', App.upc);
-                    
+        App.clearProductImage();
+
         App.contracts.SupplyChain.deployed().then(function(instance) {
             return instance.fetchItemBufferThree(App.upc);
         }).then(function(result) {
@@ -664,9 +749,10 @@ App = {
             App.certification = result[3];
             App.certifierID = result[4];
             App.price = web3.fromWei(result[5], 'ether');
-            App.distributorID = result[6];
-            App.retailerID = result[7];
-            App.consumerID = result[8];
+            App.imageHash = result[6];
+            App.distributorID = result[7];
+            App.retailerID = result[8];
+            App.consumerID = result[9];
             App.populateForm();
         }).catch(function(err) {
             console.log(err.message);

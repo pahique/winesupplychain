@@ -158,7 +158,7 @@ contract WineSupplyChain is WineSupplyChainBase {
             _harvestDate,
             _harvestNotes,
             0, 0, 0, 0, 0, 0, 0, "", "", "",
-            0,
+            0, "",
             address(0),
             address(0),
             address(0),
@@ -279,7 +279,7 @@ contract WineSupplyChain is WineSupplyChainBase {
     }
 
     // Define a function 'sellWine' that allows a producer to mark an item 'WineForSale'
-    function sellWine(uint _upc, uint _price) public 
+    function sellWine(uint _upc, uint _price, string memory _imageHash) public 
         // Call modifier to check if upc has passed previous supply chain stage
         winePacked(_upc)
         // Call modifier to verify caller of this function
@@ -287,6 +287,7 @@ contract WineSupplyChain is WineSupplyChainBase {
     {
         // Update the appropriate fields
         items[_upc].price = _price;
+        items[_upc].imageHash = _imageHash;
         items[_upc].itemState = State.WineForSale;
         // Emit the appropriate event
         emit WineForSale(_upc, _price);
@@ -433,6 +434,7 @@ contract WineSupplyChain is WineSupplyChainBase {
         string memory certification,
         address certifierID,
         uint    price,
+        string memory imageHash,
         address distributorID,
         address retailerID,
         address consumerID
@@ -447,6 +449,7 @@ contract WineSupplyChain is WineSupplyChainBase {
             wine.certification,
             wine.certifierID,
             wine.price,
+            wine.imageHash,
             wine.distributorID,
             wine.retailerID,
             wine.consumerID
