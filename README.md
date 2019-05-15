@@ -25,7 +25,7 @@
 1. Open page http://localhost:3000/src/index.html
 1. Change network on Metamask to RINKEBY
 
-. Contract Address: 0x056696DE24aEF48abb4c6F5532a42da48dBDe3aF
-. Transaction Hash: 0xc5c14c1c2f93d66c214b71b0ce6d45fab5418bcdee2fd8f43492efd85e56c926
-. Owner account: 0x14648D1222B257f63528Fb1cEB3964E008bef522
+* Contract Address: ```0x056696DE24aEF48abb4c6F5532a42da48dBDe3aF```
+* Transaction Hash: ```0xc5c14c1c2f93d66c214b71b0ce6d45fab5418bcdee2fd8f43492efd85e56c926```
+* Owner account: ```0x14648D1222B257f63528Fb1cEB3964E008bef522```
 
