@@ -30127,15 +30127,417 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {
-    "5777": {
+    "4": {
       "events": {},
       "links": {},
-      "address": "0x08939717158370ca3c6FD65DE2f73cc1933c5F68",
-      "transactionHash": "0xbe12ad9fa39197b5816ecd266cbfdd0eb8dc858e6ce0ff1163f7a934f000595a"
+      "address": "0x056696DE24aEF48abb4c6F5532a42da48dBDe3aF",
+      "transactionHash": "0xc5c14c1c2f93d66c214b71b0ce6d45fab5418bcdee2fd8f43492efd85e56c926"
+    },
+    "5777": {
+      "events": {
+        "0x9ccae00fd2be9395c2d9b26bfdda16afd213ccc4a998d7f99267d209ab7c2cc3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "grapeType",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "harvestDate",
+              "type": "uint256"
+            }
+          ],
+          "name": "GrapesHarvested",
+          "type": "event",
+          "signature": "0x9ccae00fd2be9395c2d9b26bfdda16afd213ccc4a998d7f99267d209ab7c2cc3"
+        },
+        "0x38b3ccf5c71716a234d8237d1ae8c68d7f83ec5b335a0370fe48e6d8d327fde2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            }
+          ],
+          "name": "GrapesProcessed",
+          "type": "event",
+          "signature": "0x38b3ccf5c71716a234d8237d1ae8c68d7f83ec5b335a0370fe48e6d8d327fde2"
+        },
+        "0xca9ce9c106ba5e7b582e028d80530d52e9a4b23abdcd46b510041614247a0b68": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "wineLotID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "fermentationTankID",
+              "type": "uint256"
+            }
+          ],
+          "name": "WineProduced",
+          "type": "event",
+          "signature": "0xca9ce9c106ba5e7b582e028d80530d52e9a4b23abdcd46b510041614247a0b68"
+        },
+        "0xad5370f930a165bd63e04aa036b89fab01be560c5ac6b138e220ae94f776d4d2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "barrelID",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "numDaysAging",
+              "type": "uint256"
+            }
+          ],
+          "name": "WineAged",
+          "type": "event",
+          "signature": "0xad5370f930a165bd63e04aa036b89fab01be560c5ac6b138e220ae94f776d4d2"
+        },
+        "0x62f891a6878eeed87134f828e39893ff59a336461396c6621878d31d82bdde8d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "bottlingDate",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "numBottlesLot",
+              "type": "uint256"
+            }
+          ],
+          "name": "WineBottled",
+          "type": "event",
+          "signature": "0x62f891a6878eeed87134f828e39893ff59a336461396c6621878d31d82bdde8d"
+        },
+        "0x82b54792e48b2a4bcca8f5d8e701d4f763ddf743ae21219e32d5e9792615e012": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "numDaysResting",
+              "type": "uint256"
+            }
+          ],
+          "name": "WineRested",
+          "type": "event",
+          "signature": "0x82b54792e48b2a4bcca8f5d8e701d4f763ddf743ae21219e32d5e9792615e012"
+        },
+        "0x3977d140d49919c283df5ec8f9cfa04024931c4aaa44212b402c9a6f56a38e6c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "wineLabel",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "certification",
+              "type": "string"
+            }
+          ],
+          "name": "WineLabeled",
+          "type": "event",
+          "signature": "0x3977d140d49919c283df5ec8f9cfa04024931c4aaa44212b402c9a6f56a38e6c"
+        },
+        "0x0869ab0322800b441c2ace7097217dfee49f6c8129437dd36e5e4146e0e69928": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            }
+          ],
+          "name": "WinePacked",
+          "type": "event",
+          "signature": "0x0869ab0322800b441c2ace7097217dfee49f6c8129437dd36e5e4146e0e69928"
+        },
+        "0xc2d347ecd36fc3f30bbabfe4f4a1d757006389de40b57f90127581f0dc263f46": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "price",
+              "type": "uint256"
+            }
+          ],
+          "name": "WineForSale",
+          "type": "event",
+          "signature": "0xc2d347ecd36fc3f30bbabfe4f4a1d757006389de40b57f90127581f0dc263f46"
+        },
+        "0xc4e50a10ecdbba8d26cab330220ec6f89afc954c92251c4e529542119b85c084": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            }
+          ],
+          "name": "WineSold",
+          "type": "event",
+          "signature": "0xc4e50a10ecdbba8d26cab330220ec6f89afc954c92251c4e529542119b85c084"
+        },
+        "0xc45d1150d9c75df34f991dd286a910d790ce07ba5af619b7f7d37139c3c2cafc": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            }
+          ],
+          "name": "WineShipped",
+          "type": "event",
+          "signature": "0xc45d1150d9c75df34f991dd286a910d790ce07ba5af619b7f7d37139c3c2cafc"
+        },
+        "0x14b6cc590b47a9656821bdb6db91b9e1537ca4d36ff65f265a661c8e13bfd098": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            }
+          ],
+          "name": "WineReceived",
+          "type": "event",
+          "signature": "0x14b6cc590b47a9656821bdb6db91b9e1537ca4d36ff65f265a661c8e13bfd098"
+        },
+        "0x0513f8569d804d90dd149e0e50db1c075f672ccfbb4ccabe023ff332ffa2196c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "upc",
+              "type": "uint256"
+            }
+          ],
+          "name": "WinePurchased",
+          "type": "event",
+          "signature": "0x0513f8569d804d90dd149e0e50db1c075f672ccfbb4ccabe023ff332ffa2196c"
+        },
+        "0x2977383b0207d39ef14220620b6cf3e6c9b6e78592af90baeef6614ed2fcd2c6": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "ProducerAdded",
+          "type": "event",
+          "signature": "0x2977383b0207d39ef14220620b6cf3e6c9b6e78592af90baeef6614ed2fcd2c6"
+        },
+        "0xb78e9906c5bae930ccf756a5214c9855b1782f0eb30f9566de2384f034af48f3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "ProducerRemoved",
+          "type": "event",
+          "signature": "0xb78e9906c5bae930ccf756a5214c9855b1782f0eb30f9566de2384f034af48f3"
+        },
+        "0x9e685b594e54f370ef91382c0da443292b1378dec458f2a0d0009e7451547dab": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "CertifierAdded",
+          "type": "event",
+          "signature": "0x9e685b594e54f370ef91382c0da443292b1378dec458f2a0d0009e7451547dab"
+        },
+        "0x45cee538c02c2ddcdfc31b5b9ab913c23f938f81483c880884d94694b2985a33": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "CertifierRemoved",
+          "type": "event",
+          "signature": "0x45cee538c02c2ddcdfc31b5b9ab913c23f938f81483c880884d94694b2985a33"
+        },
+        "0x28b26e7a3d20aedbc5f8f2ebf7da671c0491723a2b78f47a097b0e46dee07142": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "ConsumerAdded",
+          "type": "event",
+          "signature": "0x28b26e7a3d20aedbc5f8f2ebf7da671c0491723a2b78f47a097b0e46dee07142"
+        },
+        "0xe3f5ed5f263f1f01764a96edfc7d025f511ec5f7d180e8816908b78bcf74f098": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "ConsumerRemoved",
+          "type": "event",
+          "signature": "0xe3f5ed5f263f1f01764a96edfc7d025f511ec5f7d180e8816908b78bcf74f098"
+        },
+        "0xddbf200aa634dc3fb81cfd68583dd1040d1c751d335e1d86b631bde3e977fea8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "DistributorAdded",
+          "type": "event",
+          "signature": "0xddbf200aa634dc3fb81cfd68583dd1040d1c751d335e1d86b631bde3e977fea8"
+        },
+        "0x126174f6cf49c81cdb4a9214c6b8f037bef55b4ec31e4fc776cea2a1c8a88d59": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "DistributorRemoved",
+          "type": "event",
+          "signature": "0x126174f6cf49c81cdb4a9214c6b8f037bef55b4ec31e4fc776cea2a1c8a88d59"
+        },
+        "0x71ae26cad02663e3d92efd6ec56031a80d74a20c0ab4183faa8bf262261c9baa": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "RetailerAdded",
+          "type": "event",
+          "signature": "0x71ae26cad02663e3d92efd6ec56031a80d74a20c0ab4183faa8bf262261c9baa"
+        },
+        "0xdb7176e79cffef81cb01767dd0447a0b24bb72ca9778d4b245581086b2a7e6db": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "RetailerRemoved",
+          "type": "event",
+          "signature": "0xdb7176e79cffef81cb01767dd0447a0b24bb72ca9778d4b245581086b2a7e6db"
+        },
+        "0x29481922219aff550c5bd24116b1a07b987b621b10fb266170cd85f2d3688c38": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "result",
+              "type": "bool"
+            }
+          ],
+          "name": "ProducerToBeConfirmed",
+          "type": "event",
+          "signature": "0x29481922219aff550c5bd24116b1a07b987b621b10fb266170cd85f2d3688c38"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0xF67b04c72Ba8Bdd9470254bF054F9A44B2EC48E2",
+      "transactionHash": "0xbd3af7509db4855bb5d61827355441a566e5fcbab21d30151da08db8e9b3eefc"
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-05-14T13:24:32.165Z",
+  "updatedAt": "2019-05-15T04:34:53.527Z",
   "devdoc": {
     "methods": {
       "isOwner()": {
