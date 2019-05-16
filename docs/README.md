@@ -1,4 +1,6 @@
-# Instructions on how to use the DApp
+# Project Documentation
+
+## Instructions on how to use the DApp
 
 1. At first, the user must fill in the UPC. That can be use either to create a new product on the blockchain or to search an existing product. SKU and OwnerID get populated by the smart contract and, therefore, are readonly. **Fetch Data1**, **Fetch Data2**, **Fetch Data3** and **Fetch Events** get data from the product given its UPC. The information is overwritten in the input fields. These button can be clicked any time.
 
@@ -24,7 +26,7 @@
 
    ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/screenshots/9.wine-labeled.png "Label wine")
 
-1. **Certify Producer**, in section **Certifier Actions** and where a certifier can certify a producer and a chosen wine label. The certifier is the sender of the message and must have that role (see "Add Roles").
+1. **Certify Producer**, in section **Certifier Actions** and where a certifier can certify a producer and a chosen wine label. The certifier is the sender of the message and must have that role (see **Roles** section).
 
    ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/screenshots/8.certify-producer.png "Certify producer")
 
@@ -49,7 +51,7 @@
    ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/screenshots/12.fetch-events.png "Fetch events")
    ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/screenshots/13.transaction-history.png "Transaction History")
 
-1. **Add roles** is the section where new roles can be added to existing addresses, by following the rules below:
+1. **Roles** is the section where new roles can be added to existing addresses, by following the rules below:
 
     * The Owner of the contract has all roles.
     * Producers can be added only by the owner.
@@ -59,4 +61,25 @@
     * Consumers can be added only by retailers. 
 
    ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/screenshots/14.add-roles.png "Add roles")
+
+
+## UML Diagrams
+
+### Activity Diagram
+
+   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/ActivityDiagram.png "Activity Diagram")
+
+### Sequence Diagram
+
+   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/ActivityDiagram.png "Sequence Diagram")
+   
+### State Diagram
+
+   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/StateDiagram.png "State Diagram")
+
+### Class Diagram
+
+   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/ClassDiagram.png "Class Diagram")
+
+
 
