@@ -194,12 +194,37 @@ App = {
             App.fetchItemBufferThree();
             App.fetchEvents();
         });
-
         return App.bindEvents();
     },
 
     bindEvents: function() {
         $(document).on('click', App.handleButtonClick);
+    },
+
+    getTransactionReceipt: async function(hash) {
+        let receipt = null;
+        while(receipt === null) {
+            // we are going to check every second if transation is mined or not, once it is mined we'll leave the loop
+            receipt = await new Promise(function(resolve, reject) {
+                web3.eth.getTransactionReceipt(hash, function(err, data) {
+                    if (err !== null) reject(err);
+                    else resolve(data);
+                });
+            });
+            await setTimeout(() => {}, 1000);
+        }
+        return receipt;
+    },
+
+    // watch for the receipt, useful in case the transaction fails without error on the callback 
+    waitForReceipt: async function(hash) {
+        // waiting for transaction receipt
+        const receipt = await App.getTransactionReceipt(hash);
+        console.log('receipt: ' + receipt.status + ", logs: " + receipt.logs);
+        App.fetchItemBufferOne();
+        App.fetchItemBufferTwo();
+        App.fetchItemBufferThree();
+        App.fetchEvents();
     },
 
     handleButtonClick: async function(event) {
@@ -356,7 +381,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('harvestGrapes', result);
-            App.fetchItemBufferOne();
+            App.waitForReceipt(result.tx);
             //App.updateItemHistory(App.upc, result.tx);
         }).catch(function(err) {
             console.log(err.message);
@@ -372,6 +397,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('processGrapes',result);
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -391,7 +417,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('produceWine',result);
-            App.fetchItemBufferTwo();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -411,7 +437,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('ageWine',result);
-            App.fetchItemBufferTwo();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -431,7 +457,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('bottleUpWine',result);
-            App.fetchItemBufferTwo();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -450,7 +476,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('restWine',result);
-            App.fetchItemBufferTwo();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -470,7 +496,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('labelWine',result);
-            App.fetchItemBufferThree();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -493,7 +519,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('certifyProducer',result);
-            App.fetchItemBufferThree();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -508,7 +534,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('packWine',result);
-            App.fetchItemBufferThree();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -525,7 +551,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('sellWine',result);
-            App.fetchItemBufferThree();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -563,7 +589,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('buyWine',result);
-            App.fetchItemBufferTwo();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -578,6 +604,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('shipWine',result);
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -592,7 +619,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('receiveWine',result);
-            App.fetchItemBufferThree();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });
@@ -607,7 +634,7 @@ App = {
         }).then(function(result) {
             $("#ftw-item").text(result);
             console.log('purchaseWine',result);
-            App.fetchItemBufferThree();
+            App.waitForReceipt(result.tx);
         }).catch(function(err) {
             console.log(err.message);
         });

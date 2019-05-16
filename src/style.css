@@ -1,12 +1,55 @@
+body, div, main, section, p, h1, h2 {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+  /* border: 1px solid red; */
+}
+
 body {
   background-color:#fff;
-  padding: 2em;
+  padding: 1.2rem;
   font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
   color: #212121;
-}
-.container {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
+}
+
+main {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+section {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.form-group {
+  background-color:#0097A7;
+  color:black;
+  width: 100%;
+  padding: 25px 10px;
+  border-radius: 6px;
+  background-color: #f8f8f8;
+}
+
+.button-div {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#title-section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+#title-section h1 {
+  font-size: 1.8rem;
 }
 
 .bold { 
@@ -14,54 +57,23 @@ body {
 }
 
 input {
-    width: 80%;
-    padding: 12px 20px;
+    width: 95%;
+    padding: 12px 5px;
     margin: 10px 0;
 }
 
 button {
+    width: 100%;
     cursor: pointer;
     background-color: #4CAF50;
     border: none;
     color: white;
     background-color: rgb(112, 48, 112);
     font-size: 16px;
-    padding: 16px 32px;
+    padding: 16px 24px;
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
-}
-
-.sell { 
-  background-color: white;
-  color: #D1C4E9;
-}
-
-.ftw-intro {
-  background-color:#0097A7;
-  color:white;
-  width:100%;
-  padding:20px;
-}
-
-.form-group {
-  background-color:#0097A7;
-  color:black;
-  width:50%;
-  padding:30px;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-}
-
-.form-break {
-  background-color:#fff;
-  color:white;
-  width:100%;
-  padding:5px;
-}
-
-.horizontal-rule {
-  background-color:#BDBDBD;
 }
 
 .date-pattern {
@@ -73,10 +85,19 @@ button {
   font-size: 0.7rem;
 }
 
-.product-image {
-  float: right; 
-  max-width: 300px; 
-  visibility: hidden;  
-  margin-top: 50px;
-  margin-right: 50px;
+#price {
+  width: 80%;
+}
+
+#productImage {
+  margin: 0 auto;
+  padding: 20px;  
+  display: flex;
+  flex-flow: row wrap;
+  max-height: 300px;
+}
+
+#ftw-events {
+  padding-left: 10px;
+  font-size: 2.2vw;
 }

@@ -1,5 +1,8 @@
 # Wine Supply Chain Project
 
+This blockchain project is a simplified version of a wine supply chain.
+
+
 ## Installation Steps
 
 1. ```npm install lite-server```
@@ -28,4 +31,10 @@
 * Contract Address: ```0x056696DE24aEF48abb4c6F5532a42da48dBDe3aF```
 * Transaction Hash: ```0xc5c14c1c2f93d66c214b71b0ce6d45fab5418bcdee2fd8f43492efd85e56c926```
 * Owner account: ```0x14648D1222B257f63528Fb1cEB3964E008bef522```
+
+## IPFS
+
+The full DApp has been uploaded to IPFS, at the address below: 
+
+https://ipfs.io/ipfs/QmTMjeLSJBqHrbE9u9jsn2ebXMMC3Mn4j5AAtUz5XpSUUn/index.html
 

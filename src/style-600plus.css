@@ -1,0 +1,22 @@
+body {
+  padding: 2rem;
+  width: 70%;
+}
+
+input {
+  width: 50%;
+  padding: 12px 10px;
+}
+
+button {
+  width: auto;
+}
+
+#price {
+  width: 50%;
+}
+
+#ftw-events {
+  padding-left: 10px;
+  font-size: 1.1vw;
+}
