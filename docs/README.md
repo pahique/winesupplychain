@@ -71,7 +71,7 @@
 
 ### Sequence Diagram
 
-   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/ActivityDiagram.png "Sequence Diagram")
+   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/SequenceDiagram.png "Sequence Diagram")
    
 ### State Diagram
 
