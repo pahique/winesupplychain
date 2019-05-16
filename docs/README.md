@@ -1,6 +1,4 @@
-# Project Documentation
-
-## Instructions on how to use the DApp
+# Instructions on how to use the DApp
 
 1. At first, the user must fill in the UPC. That can be use either to create a new product on the blockchain or to search an existing product. SKU and OwnerID get populated by the smart contract and, therefore, are readonly. **Fetch Data1**, **Fetch Data2**, **Fetch Data3** and **Fetch Events** get data from the product given its UPC. The information is overwritten in the input fields. These button can be clicked any time.
 
@@ -61,25 +59,6 @@
     * Consumers can be added only by retailers. 
 
    ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/screenshots/14.add-roles.png "Add roles")
-
-
-## UML Diagrams
-
-### Activity Diagram
-
-   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/ActivityDiagram.png "Activity Diagram")
-
-### Sequence Diagram
-
-   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/SequenceDiagram.png "Sequence Diagram")
-   
-### State Diagram
-
-   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/StateDiagram.png "State Diagram")
-
-### Class Diagram
-
-   ![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/uml-diagrams/ClassDiagram.png "Class Diagram")
 
 
 
