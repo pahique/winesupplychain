@@ -2,7 +2,7 @@
 
 1. At first, the user must fill in the UPC. That can be use either to create a new product on the blockchain or to search an existing product. SKU and OwnerID get populated by the smart contract and, therefore, are readonly. "Fetch Data1", "Fetch Data2", "Fetch Data3" and "Fetch Events" get data from the product given its UPC. The information is overwritten in the input fields. These button can be clicked any time.
 
-![alt text](https://github.com/pahique/winesupplychain/docs/1.overview.png "Overview")
+![alt text](https://github.com/pahique/winesupplychain/blob/master/docs/1.overview.png "Overview")
 
 1. "Producer Actions" section group all the actions that can be taken by the producer. The first of them is "Harvest Grapes", and it requires as input a non-existing UPC, as well as the fields related to that operation. The ProducerID field is readonly and will be set as the sender of the message.
 
